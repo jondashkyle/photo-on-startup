@@ -17,7 +17,7 @@ Create a script in your user bin (photo.sh, for example) which executes the the 
 
 *Note: When executing a node script from a bash script with launchd you need to supply the full path to node, you can't simply call `node`.*
 
-Create and load a .plist file for launchd to run at load. This will have `sleepwatcher` monitor your machine for wake up and run `photo-on-startup` if it hasn't yet been run today.
+Create and load a .plist file for launchd to run at load. This will have `sleepwatcher` monitor your machine for wake up and run `photo-on-startup` if it hasn't yet been run today. Save it as `com.photoonstart.sleepwatcher.plist`.
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -25,7 +25,7 @@ Create and load a .plist file for launchd to run at load. This will have `sleepw
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>photoaday.sleepwatcher</string>
+  <string>com.photoonstart.sleepwatcher</string>
   <key>ProgramArguments</key>
   <array>
     <string>/usr/local/sbin/sleepwatcher</string>
