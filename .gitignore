@@ -1,5 +1,6 @@
 .DS_store
 www/
+public/_data.json
 public/img/
 node_modules/
 aws-credentials.json

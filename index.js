@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 var program = require('commander')
 var EventEmitter = require('events').EventEmitter
 var imagesnapjs = require('imagesnapjs')
@@ -117,7 +116,7 @@ function deploy () {
  */
 events.on('data:ready', function (_data) {
   data = _data
-  if (! data[date]) {
+  if (! data[date] && parseInt(rn.getHours()) > 5) {
     takePhoto()
   } else {
     console.log('Photo was already taken today')
