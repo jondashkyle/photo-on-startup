@@ -48,16 +48,29 @@ function readData () {
 /**
  * Write Data
  */
-function writeData (data) {
-  data[date] = {
+function writeData () {
+  data.unshift({
+    date: date,
     image: img,
     time: time
-  }
+  })
 
   fs.writeJson(__dirname + '/' + options.publicPath + options.data, data, function (err) {
     if (err) throw err;
     events.emit('data:written')
   })
+}
+
+/**
+ * Photo Exists
+ */
+function photoExists(_date) {
+  for(var i = 0, len = data.length; i < len; i++) {
+    if (data[i].date === _date){
+      return true
+    }
+  }
+  return false
 }
 
 /**
@@ -93,22 +106,18 @@ function deploy () {
     deleteRemoved: true,
     s3Params: {
       Bucket: 'photo.jon-kyle.com'
-    },
-  };
+    }
+  }
 
-  var uploader = client.uploadDir(params);
+  var uploader = client.uploadDir(params)
 
   uploader.on('error', function(err) {
-    console.error("unable to sync:", err.stack);
-  });
-
-  uploader.on('progress', function() {
-    console.log("progress", uploader.progressAmount, uploader.progressTotal);
-  });
+    console.error('unable to sync: ', err.stack)
+  })
 
   uploader.on('end', function() {
-    console.log("done uploading");
-  });
+    console.log('done uploading')
+  })
 }
 
 /**
@@ -116,7 +125,7 @@ function deploy () {
  */
 events.on('data:ready', function (_data) {
   data = _data
-  if (! data[date] && parseInt(rn.getHours()) > 5) {
+  if (! photoExists(date) && parseInt(rn.getHours()) > 5) {
     takePhoto()
   } else {
     console.log('Photo was already taken today')
@@ -127,7 +136,7 @@ events.on('data:ready', function (_data) {
  * Photo Taken
  */
 events.on('photo:taken', function (img) {
-  writeData(data)
+  writeData()
 })
 
 /**
