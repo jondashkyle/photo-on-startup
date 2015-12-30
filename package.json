@@ -1,0 +1,19 @@
+{
+  "name": "cam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "fs-extra": "^0.26.3",
+    "harp": "^0.20.1",
+    "imagesnapjs": "0.0.7",
+    "s3": "^4.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jon-Kyle <contact@jon-kyle.com> (http://jon-kyle.com)",
+  "license": "ISC"
+}

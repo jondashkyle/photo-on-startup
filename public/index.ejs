@@ -1,0 +1,23 @@
+<header class="p1">
+  <ul class="p1">
+    <li>each day,</li>
+    <li>when i first open my computer,</li>
+    <li>it takes a picture of me,</li>
+    <li>and puts it here ↓</li>
+  </ul>
+</header>
+
+<main class="p1">
+  <% for (var slug in public._data) { %>
+    <% var photo = public._data[slug] %>
+    <div class="c6 p1">
+      <figure>
+        <img src="<%- photo.image %>">
+        <figcaption>
+          <%- slug %><br/>
+          <%- photo.time %>
+        </figcaption>
+      </figure>
+    </div>
+  <% } %>
+</main>

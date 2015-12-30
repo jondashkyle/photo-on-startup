@@ -1,0 +1,5 @@
+.DS_store
+www/
+public/img/
+node_modules/
+aws-credentials.json
