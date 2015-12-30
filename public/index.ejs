@@ -2,15 +2,15 @@
   <ul class="p1">
     <li>each day,</li>
     <li>when i first open my computer,</li>
-    <li>it takes a picture of me,</li>
-    <li>and puts it here ↓</li>
+    <li><a href="https://github.com/jondashkyle/photo-on-startup" target="_blank">it takes a picture of me</a>,</li>
+    <li>and puts it here <span class="arrow">↓</span></li>
   </ul>
 </header>
 
-<main class="p1">
+<main class="">
   <% for (var slug in public._data) { %>
     <% var photo = public._data[slug] %>
-    <div class="c6 p1">
+    <div class="c6">
       <figure>
         <img src="<%- photo.image %>">
         <figcaption>
