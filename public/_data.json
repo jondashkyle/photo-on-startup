@@ -2,11 +2,13 @@
   {
     "date": "12-30-2015",
     "image": "img/12-30-2015.jpg",
-    "time": "9:55:23"
+    "time": "9:55:23",
+    "processed": true
   },
   {
     "date": "12-29-2015",
     "image": "img/12-29-2015.jpg",
-    "time": "14:11:50"
+    "time": "14:11:50",
+    "processed": true
   }
 ]

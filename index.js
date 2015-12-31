@@ -2,13 +2,15 @@ var program = require('commander')
 var EventEmitter = require('events').EventEmitter
 var imagesnapjs = require('imagesnapjs')
 var harp = require('harp')
+var Twitter = require('twitter')
 var fs = require('fs-extra')
 var s3 = require('s3')
+var im = require('imagemagick')
 
 var events = new EventEmitter()
 var rn = new Date()
 
-var awscredentials = require('./aws-credentials.json')
+var credentials = require('./credentials.json')
 var options = require('./options.json')
 
 var date = [rn.getMonth() + 1, rn.getDate(), rn.getFullYear()].join('-')
@@ -26,12 +28,17 @@ program
 program
   .command('snap')
   .description('take photo and upload')
-  .action(readData)
+  .action(snap)
 
 program
   .command('deploy')
   .description('deploy site to s3')
   .action(deploy)
+
+program
+  .command('twitter')
+  .description('Update Twitter profile image with most recent snap')
+  .action(twitter)
  
 program.parse(process.argv)
 
@@ -77,9 +84,10 @@ function photoExists(_date) {
  * Take Photo
  */
 function takePhoto () {
-  imagesnapjs.capture(__dirname + '/' + options.publicPath + img, { cliflags: '-w 1'}, function(err) {
+  var imgPath = __dirname + '/public/' + img
+  imagesnapjs.capture(imgPath, { cliflags: '-w 1'}, function(err) {
     if (err) throw err;
-    events.emit('photo:taken', img)
+    events.emit('photo:taken', {img: imgPath})
   })
 }
 
@@ -93,12 +101,34 @@ function compileHarp () {
   })
 }
 
+
+/**
+ * Process Photo
+ */
+
+function processPhoto (_data) {
+  _data = _data || { }
+  im.resize({
+    srcPath: _data.imgPath,
+    dstPath: _data.imgPath,
+    quality: 1,
+    sharpening: 0.2,
+    colorspace: 'Gray',
+    height: 480,
+    width: 848
+  }, function(err, stdout, stderr){
+    if (err) throw err;
+    console.log('Photo processed')
+    events.emit('photo:processed', {img: _data.imgPath})
+  })
+}
+
 /**
  * Deploy
  */
 function deploy () {
   var client = s3.createClient({
-    s3Options: awscredentials,
+    s3Options: credentials.aws,
   })
 
   var params = {
@@ -121,34 +151,53 @@ function deploy () {
 }
 
 /**
- * Data ready
+ * Update Twitter Profile Image
  */
-events.on('data:ready', function (_data) {
-  data = _data
-  if (! photoExists(date) && parseInt(rn.getHours()) > 5) {
-    takePhoto()
-  } else {
-    console.log('Photo was already taken today')
-  }
-})
+function updateTwitter (imgPath) {
+  var client = new Twitter(credentials.twitter)
+  var image = fs.readFileSync(imgPath)
+
+  client.post('account/update_profile_image', {
+    image: new Buffer(image).toString('base64'),
+  }, function(err){
+    if (err) throw err;
+    console.log('done')
+  })
+}
 
 /**
- * Photo Taken
+ * Update
  */
-events.on('photo:taken', function (img) {
-  writeData()
-})
+function snap () {
+  events
+    .on('data:ready', function (_data) {
+      data = _data
+      if (! photoExists(date) && parseInt(rn.getHours()) > 5) {
+        takePhoto()
+      } else {
+        console.log('Photo was already taken today')
+      }
+    })
+    .on('photo:taken', processPhoto)
+    .on('photo:processed', writeData)
+    .on('data:written', compileHarp)
+    .on('harp:compiled', function () {
+      deploy()
+      updateTwitter({imgPath: __dirname + '/public/' + data[0].image})
+    })
+
+  readData()
+}
 
 /**
- * Data Written
+ * Twitter
  */
-events.on('data:written', function () {
-  compileHarp()
-})
+function twitter () {
+  events
+    .on('data:ready', function (_data) {
+      data = _data
+      updateTwitter(__dirname + '/public/' + data[0].image)
+    })
 
-/**
- * Harp compiled
- */
-events.on('harp:compiled', function () {
-  deploy()
-})
+  readData()
+}

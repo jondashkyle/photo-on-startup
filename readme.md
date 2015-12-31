@@ -1,6 +1,6 @@
 # Photo on Startup
 
-I wanted to have my computer take a picture of me the first time I opened it each day and make those photos accessible from a small site online. This script does all of that stuff. 
+I wanted to have my computer take a picture of me the first time I opened it each day and make those photos accessible from a small site online and update my Twitter profile image. This script does all of that stuff. 
 
 Installation is somewhat involved, and it’s likely overkill for your needs. If you're looking to do something similar perhaps you’ll find something useful in here.
 
@@ -65,13 +65,21 @@ Create and load a .plist file for launchd to run at load. This will have `sleepw
 }
 ```
 
-Lastly, create a file called `aws-credentials.json` in the root of the `photo-on-startup` directory. Fill in your credentials as appropriate:
+Lastly, create a file called `credentials.json` in the root of the `photo-on-startup` directory. Fill in your credentials as appropriate:
 
 ```
 { 
-  "accessKeyId": "ASDF123", 
-  "secretAccessKey": "ASDF123", 
-  "region": "us-east-1" 
+  "aws": {
+    "accessKeyId": "ASDF123", 
+    "secretAccessKey": "ASDF123", 
+    "region": "us-east-1"
+  },
+  "twitter": {
+    "consumer_key": "ASDF123",
+    "consumer_secret": "ASDF123",
+    "access_token_key": "ASDF123",
+    "access_token_secret": "ASDF123"
+  }
 }
 ```
 
