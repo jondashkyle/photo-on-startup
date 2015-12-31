@@ -6,7 +6,7 @@ Installation is somewhat involved, and it’s likely overkill for your needs. If
 
 ## Installation
 
-Run `npm install` on the `photo-on-startup` directory. Install imagesnap `brew install imagesnap`. Install and configure sleepwatcher `brew install sleepwatcher`.
+Run `npm install` on the `photo-on-startup` directory. Install imagesnap `brew install imagesnap`. Install imagemagick `brew install imagemagick`. Install and configure sleepwatcher `brew install sleepwatcher`.
 
 Create a script in your user bin (photo.sh, for example) which executes the the photo-on-startup script snap command. Be sure to change your directories as appropriate. For example:
 
