@@ -14,14 +14,14 @@ body {
 }
 
 header {
-  font-family: arial, sans-serif;
-  font-size: 1.5rem;
+  text-align: center;
+  line-height: 1.5;
 }
 
 header ul {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
 }
 
 header li:before {
@@ -38,7 +38,6 @@ header li:before {
 }
 
 figure {
-  background: #333;
   position: relative;
   padding-bottom: 56.6037736%;
   margin: 0;
@@ -53,13 +52,19 @@ img {
   width: 100%;
 }
 
+img[data-src] {
+  display: none;
+}
+
 figcaption {
   width: 150px;
   padding: 1rem;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  top: -3rem;
+  left: 0;
   z-index: 2;
+  transform: rotate(90deg);
+  transform-origin: 0 100%;
 }
 
 a {

@@ -13,7 +13,7 @@ var rn = new Date()
 var credentials = require('./credentials.json')
 var options = require('./options.json')
 
-var date = [rn.getMonth() + 1, rn.getDate(), rn.getFullYear()].join('-')
+var date = [rn.getFullYear(), rn.getMonth() + 1, rn.getDate()].join('-')
 var time = [rn.getHours(), rn.getMinutes(), rn.getSeconds()].join(':')
 var img = 'img/' + date + '.jpg'
 var data = { }
@@ -57,7 +57,7 @@ function readData () {
  */
 function writeData () {
   data.unshift({
-    date: date,
+    date: [rn.getMonth() + 1, rn.getDate(), rn.getFullYear()].join('-'),
     image: img,
     time: time
   })
@@ -85,9 +85,9 @@ function photoExists(_date) {
  */
 function takePhoto () {
   var imgPath = __dirname + '/public/' + img
-  imagesnapjs.capture(imgPath, { cliflags: '-w 1'}, function(err) {
+  imagesnapjs.capture(imgPath, {cliflags: '-w 1'}, function(err) {
     if (err) throw err;
-    events.emit('photo:taken', {img: imgPath})
+    events.emit('photo:taken', {imgPath: imgPath})
   })
 }
 
@@ -119,7 +119,7 @@ function processPhoto (_data) {
   }, function(err, stdout, stderr){
     if (err) throw err;
     console.log('Photo processed')
-    events.emit('photo:processed', {img: _data.imgPath})
+    events.emit('photo:processed', {imgPath: _data.imgPath})
   })
 }
 
@@ -153,9 +153,9 @@ function deploy () {
 /**
  * Update Twitter Profile Image
  */
-function updateTwitter (imgPath) {
+function updateTwitter (_data) {
   var client = new Twitter(credentials.twitter)
-  var image = fs.readFileSync(imgPath)
+  var image = fs.readFileSync(_data.imgPath)
 
   client.post('account/update_profile_image', {
     image: new Buffer(image).toString('base64'),
@@ -196,7 +196,7 @@ function twitter () {
   events
     .on('data:ready', function (_data) {
       data = _data
-      updateTwitter(__dirname + '/public/' + data[0].image)
+      updateTwitter({imgPath: __dirname + '/public/' + data[0].image})
     })
 
   readData()

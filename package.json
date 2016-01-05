@@ -10,12 +10,20 @@
     "imagemagick": "^0.1.3",
     "imagesnapjs": "0.0.7",
     "s3": "^4.4.0",
-    "twitter": "^1.2.5"
+    "twitter": "^1.2.5",
+    "scrollmonitor": "^1.0.12" 
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "brfs": "^1.4.1",
+    "browserify": "^12.0.1",
+    "watchify": "^3.6.1"
+  },
   "scripts": {
     "snap": "node ./index.js snap",
-    "deploy": "harp compile & node ./index.js deploy"
+    "deploy": "harp compile & node ./index.js deploy",
+    "build-js": "browserify -t brfs ./public/_source/main.js -o ./public/bundle.js",
+    "watch-js": "watchify -d -t brfs ./public/_source/main.js -o ./public/bundle.js",
+    "watch": "npm run watch-js & harp server"
   },
   "author": "Jon-Kyle <contact@jon-kyle.com> (http://jon-kyle.com)",
   "license": "ISC"

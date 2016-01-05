@@ -3,7 +3,8 @@
     <li>each day,</li>
     <li>when i first open my computer,</li>
     <li><a href="https://github.com/jondashkyle/photo-on-startup" target="_blank">it takes a picture of me</a>,</li>
-    <li>and puts it here <span class="arrow">↓</span></li>
+    <li>and puts it here</li>
+    <li><span class="arrow">↓</span></li>
   </ul>
 </header>
 
@@ -12,7 +13,7 @@
     <% var photo = public._data[slug] %>
     <div class="c6">
       <figure>
-        <img src="<%- photo.image %>">
+        <img data-src="<%- photo.image %>">
         <figcaption>
           <%- photo.date %><br/>
           <%- photo.time %>
